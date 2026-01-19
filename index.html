@@ -114,13 +114,18 @@
       flex-shrink: 0; /* 버튼은 항상 보이게 */
     }
 
-    input {
+    input[type="text"] {
       padding: 8px 10px;
       font-size: 15px;
       border-radius: 8px;
       border: 1px solid #d0d7de;
       width: 100%;
       box-sizing: border-box;
+    }
+
+    /* 체크박스는 기본 크기 유지 */
+    input[type="checkbox"] {
+      flex-shrink: 0;
     }
 
     .routine-name {
