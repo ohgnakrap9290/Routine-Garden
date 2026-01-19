@@ -1,295 +1,299 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
-    <head>
-        <meta charset="UTF-8" />
-        <title>Life Contribution Grass 🌱</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <style>
-            :root {
-                --empty: #ebedf0;
-                --low: #9be9a8;
-                --mid: #40c463;
-                --high: #216e39;
-                --done: #ffd700;
-                --today-border: #0969da;
-            }
+<head>
+  <meta charset="UTF-8" />
+  <title>Life Contribution Grass 🌱</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --empty: #ebedf0;
+      --low: #9be9a8;
+      --mid: #40c463;
+      --high: #216e39;
+      --done: #ffd700;
+      --today-border: #0969da;
+    }
 
-            body {
-                margin: 0;
-                padding: 16px;
-                font-family:
-                    system-ui,
-                    -apple-system,
-                    BlinkMacSystemFont,
-                    sans-serif;
-                background: #f6f8fa;
-                color: #24292e;
-            }
+    body {
+      margin: 0;
+      padding: 16px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f6f8fa;
+      color: #24292e;
+    }
 
-            .app {
-                max-width: 720px; /* 모바일에서 너무 꽉 차지 않게 */
-                margin: 0 auto;
-                padding: 12px 12px 20px;
-            }
+    .app {
+      max-width: 720px; /* 모바일에서 너무 꽉 차지 않게 */
+      margin: 0 auto;
+      padding: 12px 12px 20px;
+    }
 
-            .header {
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                margin-bottom: 16px;
-            }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
 
-            .year {
-                font-size: 16px;
-                font-weight: 600;
-                letter-spacing: 0.5px;
-            }
+    .year {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
 
-            .stats {
-                margin-left: auto;
-                font-size: 13px;
-                color: #57606a;
-            }
+    
 
-            .grass-wrapper {
-                overflow-x: auto;
-                padding: 8px 4px 12px;
-                margin: 0 -4px; /* 가장자리에 숨쉴 공간 */
-            }
+    .stats {
+      margin-left: auto;
+      font-size: 13px;
+      color: #57606a;
+    }
 
-            .grass {
-                display: grid;
-                grid-auto-flow: column;
-                grid-auto-columns: 12px; /* 모바일에서 살짝 작게 */
-                grid-template-rows: repeat(7, 12px);
-                gap: 3px;
-            }
+    .grass-wrapper {
+      overflow-x: auto;
+      padding: 8px 4px 12px;
+      margin: 0 -4px; /* 가장자리에 숨쉴 공간 */
+    }
 
-            .cell {
-                width: 12px;
-                height: 12px;
-                background: var(--empty);
-                border-radius: 3px;
-                transition:
-                    transform 0.15s ease,
-                    box-shadow 0.15s ease;
-            }
+    .grass {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: 12px; /* 모바일에서 살짝 작게 */
+      grid-template-rows: repeat(7, 12px);
+      gap: 3px;
+    }
 
-            .cell:hover {
-                transform: scale(1.15);
-                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-            }
+    .cell {
+      width: 12px;
+      height: 12px;
+      background: var(--empty);
+      border-radius: 3px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
 
-            .cell.today {
-                outline: 2px solid var(--today-border);
-                outline-offset: -2px;
-            }
+    .cell:hover {
+      transform: scale(1.15);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
 
-            .controls {
-                margin-top: 20px;
-                display: flex;
-                gap: 20px;
-                flex-wrap: wrap;
-            }
+    .cell.today {
+      outline: 2px solid var(--today-border);
+      outline-offset: -2px;
+    }
 
-            .routine-box {
-                width: 100%; /* 모바일에서는 한 줄 */
-                background: #ffffff;
-                border-radius: 12px;
-                padding: 12px 14px 14px;
-                box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
-            }
+    .controls {
+      margin-top: 20px;
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
 
-            .routine {
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                margin-bottom: 8px;
-                font-size: 15px;
-            }
+    .routine-box {
+      width: 100%; /* 모바일에서는 한 줄 */
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 12px 14px 14px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+    }
 
-            .routine button {
-                background: transparent;
-                border: none;
-                cursor: pointer;
-                color: #cf222e;
-            }
+    .routine {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 15px;
+      width: 100%;
+      overflow: hidden; /* 박스 밖으로 튀는 것 방지 */
+    }
 
-            input {
-                padding: 8px 10px;
-                font-size: 15px;
-                border-radius: 8px;
-                border: 1px solid #d0d7de;
-                width: 100%;
-                box-sizing: border-box;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="app">
-            <div class="header">
-                <strong id="yearLabel" class="year"></strong>
-                <div class="stats" id="streakInfo"></div>
-            </div>
+    .routine button {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: #cf222e;
+      flex-shrink: 0; /* 버튼은 항상 보이게 */
+    }
 
-            <div class="grass-wrapper">
-                <div class="grass" id="grass"></div>
-            </div>
+    input {
+      padding: 8px 10px;
+      font-size: 15px;
+      border-radius: 8px;
+      border: 1px solid #d0d7de;
+      width: 100%;
+      box-sizing: border-box;
+    }
 
-            <div class="controls">
-                <div class="routine-box">
-                    <h3>오늘 루틴</h3>
-                    <div id="routineList"></div>
-                    <input id="routineInput" placeholder="루틴 추가" />
-                </div>
-            </div>
-        </div>
+    .routine-name {
+      flex: 1; /* 남은 공간 차지 */
+      white-space: nowrap; /* 한 줄 유지 */
+      overflow: hidden; /* 넘치는 텍스트 숨김 */
+      text-overflow: ellipsis; /* … 처리 */
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <strong id="yearLabel" class="year"></strong>
+    <div class="stats" id="streakInfo"></div>
+  </div>
 
-        <script>
-            const STORAGE_KEY = 'life-grass-v1';
+  <div class="grass-wrapper">
+    <div class="grass" id="grass"></div>
+  </div>
 
-            let data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
-                routines: [],
-                logs: {},
-            };
+  <div class="controls">
+    <div class="routine-box">
+      <h3>오늘 루틴</h3>
+      <div id="routineList"></div>
+      <input id="routineInput" placeholder="루틴 추가" />
+    </div>
+  </div>
+</div>
 
-            let currentYear = new Date().getFullYear();
+<script>
+const STORAGE_KEY = 'life-grass-v1';
 
-            function save() {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-            }
+let data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
+  routines: [],
+  logs: {}
+};
 
-            function dateKey(date) {
-                return date.toISOString().slice(0, 10);
-            }
+let currentYear = new Date().getFullYear();
 
-            function getYearDates(year) {
-                const dates = [];
-                const d = new Date(year, 0, 1);
-                while (d.getFullYear() === year) {
-                    dates.push(new Date(d));
-                    d.setDate(d.getDate() + 1);
-                }
-                return dates;
-            }
+function save() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
 
-            function completionRatio(key) {
-                if (data.routines.length === 0) return 0;
-                const done = (data.logs[key] || []).length;
-                return done / data.routines.length;
-            }
+function dateKey(date) {
+  return date.toISOString().slice(0,10);
+}
 
-            function colorForRatio(r) {
-                if (r === 1) return 'var(--done)';
-                if (r >= 0.75) return 'var(--high)';
-                if (r >= 0.5) return 'var(--mid)';
-                if (r > 0) return 'var(--low)';
-                return 'var(--empty)';
-            }
+function getYearDates(year) {
+  const dates = [];
+  const d = new Date(year, 0, 1);
+  while (d.getFullYear() === year) {
+    dates.push(new Date(d));
+    d.setDate(d.getDate() + 1);
+  }
+  return dates;
+}
 
-            function renderGrass() {
-                const grass = document.getElementById('grass');
-                grass.innerHTML = '';
+function completionRatio(key) {
+  if (data.routines.length === 0) return 0;
+  const done = (data.logs[key] || []).length;
+  return done / data.routines.length;
+}
 
-                const dates = getYearDates(currentYear);
-                const todayKey = dateKey(new Date());
+function colorForRatio(r) {
+  if (r === 1) return 'var(--done)';
+  if (r >= 0.75) return 'var(--high)';
+  if (r >= 0.5) return 'var(--mid)';
+  if (r > 0) return 'var(--low)';
+  return 'var(--empty)';
+}
 
-                dates.forEach((date) => {
-                    const key = dateKey(date);
-                    const ratio = completionRatio(key);
-                    const cell = document.createElement('div');
-                    cell.className = 'cell';
-                    cell.style.background = colorForRatio(ratio);
-                    if (key === todayKey) cell.classList.add('today');
-                    grass.appendChild(cell);
-                });
-            }
+function renderGrass() {
+  const grass = document.getElementById('grass');
+  grass.innerHTML = '';
 
-            function renderRoutines() {
-                const list = document.getElementById('routineList');
-                list.innerHTML = '';
-                const today = dateKey(new Date());
+  const dates = getYearDates(currentYear);
+  const todayKey = dateKey(new Date());
 
-                data.routines.forEach((r) => {
-                    const div = document.createElement('div');
-                    div.className = 'routine';
+  dates.forEach(date => {
+    const key = dateKey(date);
+    const ratio = completionRatio(key);
+    const cell = document.createElement('div');
+    cell.className = 'cell';
+    cell.style.background = colorForRatio(ratio);
+    if (key === todayKey) cell.classList.add('today');
+    grass.appendChild(cell);
+  });
+}
 
-                    const cb = document.createElement('input');
-                    cb.type = 'checkbox';
-                    cb.checked = (data.logs[today] || []).includes(r);
-                    cb.onchange = () => toggleRoutine(r);
+function renderRoutines() {
+  const list = document.getElementById('routineList');
+  list.innerHTML = '';
+  const today = dateKey(new Date());
 
-                    const label = document.createElement('span');
-                    label.innerText = r;
+  data.routines.forEach(r => {
+    const div = document.createElement('div');
+    div.className = 'routine';
 
-                    const del = document.createElement('button');
-                    del.innerText = '✕';
-                    del.onclick = () => removeRoutine(r);
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.checked = (data.logs[today] || []).includes(r);
+    cb.onchange = () => toggleRoutine(r);
 
-                    div.append(cb, label, del);
-                    list.appendChild(div);
-                });
-            }
+    const label = document.createElement('span');
+    label.className = 'routine-name';
+    label.innerText = r;
 
-            function toggleRoutine(r) {
-                const today = dateKey(new Date());
-                data.logs[today] = data.logs[today] || [];
-                const idx = data.logs[today].indexOf(r);
-                if (idx >= 0) data.logs[today].splice(idx, 1);
-                else data.logs[today].push(r);
-                save();
-                render();
-            }
+    const del = document.createElement('button');
+    del.innerText = '✕';
+    del.onclick = () => removeRoutine(r);
 
-            function removeRoutine(r) {
-                data.routines = data.routines.filter((x) => x !== r);
-                Object.keys(data.logs).forEach((k) => {
-                    data.logs[k] = data.logs[k].filter((x) => x !== r);
-                });
-                save();
-                render();
-            }
+    div.append(cb, label, del);
+    list.appendChild(div);
+  });
+}
 
-            function addRoutine() {
-                const input = document.getElementById('routineInput');
-                const v = input.value.trim();
-                if (!v || data.routines.includes(v)) return;
-                data.routines.push(v);
-                input.value = '';
-                save();
-                render();
-            }
+function toggleRoutine(r) {
+  const today = dateKey(new Date());
+  data.logs[today] = data.logs[today] || [];
+  const idx = data.logs[today].indexOf(r);
+  if (idx >= 0) data.logs[today].splice(idx,1);
+  else data.logs[today].push(r);
+  save();
+  render();
+}
 
-            document
-                .getElementById('routineInput')
-                .addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter') addRoutine();
-                });
+function removeRoutine(r) {
+  data.routines = data.routines.filter(x => x !== r);
+  Object.keys(data.logs).forEach(k => {
+    data.logs[k] = data.logs[k].filter(x => x !== r);
+  });
+  save();
+  render();
+}
 
-            function calcStreak() {
-                let cur = 0;
-                const today = new Date();
-                let d = new Date(today);
+function addRoutine() {
+  const input = document.getElementById('routineInput');
+  const v = input.value.trim();
+  if (!v || data.routines.includes(v)) return;
+  data.routines.push(v);
+  input.value = '';
+  save();
+  render();
+}
 
-                while (true) {
-                    const k = dateKey(d);
-                    if (completionRatio(k) === 1) cur++;
-                    else break;
-                    d.setDate(d.getDate() - 1);
-                }
+document.getElementById('routineInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') addRoutine();
+});
 
-                document.getElementById('streakInfo').innerText =
-                    `${cur} day streak`;
-            }
+function calcStreak() {
+  let cur = 0;
+  const today = new Date();
+  let d = new Date(today);
 
-            function render() {
-                document.getElementById('yearLabel').innerText = currentYear;
-                renderGrass();
-                renderRoutines();
-                calcStreak();
-            }
+  while (true) {
+    const k = dateKey(d);
+    if (completionRatio(k) === 1) cur++;
+    else break;
+    d.setDate(d.getDate() - 1);
+  }
 
-            render();
-        </script>
-    </body>
+  document.getElementById('streakInfo').innerText = `${cur} day streak`;
+}
+
+function render() {
+  document.getElementById('yearLabel').innerText = currentYear;
+  renderGrass();
+  renderRoutines();
+  calcStreak();
+}
+
+render();
+</script>
+</body>
 </html>
